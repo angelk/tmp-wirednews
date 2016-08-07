@@ -1,0 +1,21 @@
+language: php
+php:
+  - 5.6
+  - 7.0
+  
+before_script:
+  - mv app/config/parameters_travis.yml app/config/parameters.yml
+
+script:
+    - composer install
+    -  vendor/bin/phpunit -c tests/PhpUnit/phpunit.xml
+    - composer install -d Test/PhpCs/ --prefer-dist --no-dev
+    - Test/PhpCs/vendor/bin/phpcs --standard=Test/codeSniffer/phpcs.xml src/
+
+matrix:
+    allow_failures:
+        - php: 7.0
+
+notifications:
+    on_success: never
+    on_failure: always

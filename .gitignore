@@ -1,0 +1,12 @@
+/vendor
+/tests/*/vendor
+
+/web/bundles
+
+/bin
+/app/cache/*
+/app/logs/*
+/app/config/parameters.yml
+/app/bootstrap.php.cache
+/var/*
+/web/bundles
