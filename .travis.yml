@@ -10,7 +10,7 @@ script:
     - composer install
     -  vendor/bin/phpunit -c tests/PhpUnit/phpunit.xml
     - composer install -d tests/PhpCs/ --prefer-dist --no-dev
-    - Test/PhpCs/vendor/bin/phpcs --standard=tests/PhpCs/phpcs.xml src/
+    - tests/PhpCs/vendor/bin/phpcs --standard=tests/PhpCs/phpcs.xml src/
 
 matrix:
     allow_failures:
