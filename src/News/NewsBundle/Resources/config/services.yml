@@ -15,10 +15,12 @@ services:
 
     news.fetch.title.subscriber:
         class: News\NewsBundle\EventListener\TitleFetchSubscriber
+        arguments: ["@mailer", "%news_bundle_reposting_mail%"]
         tags:
             - {  name: kernel.event_subscriber }
 
     news.fetch.latest.subscriber:
         class: News\NewsBundle\EventListener\NewestFetchSubscriber
+        arguments: ["@mailer", "%news_bundle_reposting_mail%"]
         tags:
             - {  name: kernel.event_subscriber }

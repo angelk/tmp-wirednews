@@ -3,6 +3,8 @@
 namespace News\NewsBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Swift_Message;
+use Swift_Mailer;
 
 use News\NewsBundle\Fetch\Event\TitleFetchEvent;
 
@@ -13,6 +15,19 @@ use News\NewsBundle\Fetch\Event\TitleFetchEvent;
  */
 class TitleFetchSubscriber implements EventSubscriberInterface
 {
+    private $mailer;
+    private $reportingMail;
+
+    /**
+     * @param Swift_Mailer $mailer
+     * @param type $reportingMail
+     */
+    public function __construct(Swift_Mailer $mailer, $reportingMail)
+    {
+        $this->reportingMail = $reportingMail;
+        $this->mailer = $mailer;
+    }
+    
     public static function getSubscribedEvents()
     {
         return [
@@ -22,8 +37,20 @@ class TitleFetchSubscriber implements EventSubscriberInterface
     
     public function titleFetch(TitleFetchEvent $event)
     {
-        var_dump($event->getDescription());
-        var_dump($event->getLink());
-        throw new \Exception('not implemented');
+        $this->sendMail(
+            $event->getLink(),
+            $event->getDescription()
+        );
+    }
+    
+    private function sendMail($link, $description)
+    {
+        $message = Swift_Message::newInstance();
+        $message->setSubject('Top news');
+        $message->setFrom('wirednewstest@gmail.com');
+        $message->setTo($this->reportingMail);
+        $body = "{$description} - {$link}";
+        $message->setBody($body);
+        $this->mailer->send($message);
     }
 }

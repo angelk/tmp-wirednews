@@ -4,7 +4,7 @@ offNews
 test project!
 
 A Symfony project created on August 7, 2016, 10:57 am.
-# tmp-offnews
+# tmp-wirednews
 
 [![Build Status](https://travis-ci.org/angelk/tmp-offnews.svg?branch=master)](https://travis-ci.org/angelk/tmp-offnews)
 

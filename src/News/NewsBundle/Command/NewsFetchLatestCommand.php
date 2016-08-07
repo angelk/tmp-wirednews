@@ -43,6 +43,6 @@ class NewsFetchLatestCommand extends NewFetchAbstractCommand
         }
         
         $event = new NewestFetchEvent($links);
-        $this->dispachEvent('news.fetch.newest', $event);
+        $this->dispachEvent('news.fetch.latest', $event);
     }
 }

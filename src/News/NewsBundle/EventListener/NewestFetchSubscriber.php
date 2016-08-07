@@ -3,6 +3,8 @@
 namespace News\NewsBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Swift_Message;
+use Swift_Mailer;
 
 use News\NewsBundle\Fetch\Event\NewestFetchEvent;
 
@@ -13,16 +15,42 @@ use News\NewsBundle\Fetch\Event\NewestFetchEvent;
  */
 class NewestFetchSubscriber implements EventSubscriberInterface
 {
+    private $mailer;
+    private $reportingMail;
+    
+    /**
+     * @param Swift_Mailer $mailer
+     * @param type $reportingMail
+     */
+    public function __construct(Swift_Mailer $mailer, $reportingMail)
+    {
+        $this->reportingMail = $reportingMail;
+        $this->mailer = $mailer;
+    }
+
     public static function getSubscribedEvents()
     {
         return [
-            'news.fetch.newest' => 'newestFetch',
+            'news.fetch.latest' => 'latestFetch',
         ];
     }
     
-    public function newestFetch(NewestFetchEvent $event)
+    public function latestFetch(NewestFetchEvent $event)
     {
-        var_dump($event->getPopularArticles());
-        throw new \Exception('not implemented');
+        $this->sendMail($event->getPopularArticles());
+    }
+    
+    private function sendMail($news)
+    {
+        $message = Swift_Message::newInstance();
+        $message->setSubject('Latest news');
+        $message->setFrom('wirednewstest@gmail.com');
+        $message->setTo($this->reportingMail);
+        $body = '';
+        foreach ($news as $new) {
+            $body .= "{$new['link']} - {$new['description']}" . PHP_EOL;
+        }
+        $message->setBody($body);
+        $this->mailer->send($message);
     }
 }
