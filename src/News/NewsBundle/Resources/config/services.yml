@@ -24,3 +24,12 @@ services:
         arguments: ["@mailer", "%news_bundle_reposting_mail%"]
         tags:
             - {  name: kernel.event_subscriber }
+            
+    news.fetch.generic.subscriber:
+        class: News\NewsBundle\EventListener\GenericFetchSubscriber
+        arguments: ["@news.cache"]
+        tags:
+            - {  name: kernel.event_subscriber, priority: -255 }
+            
+    news.cache:
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
