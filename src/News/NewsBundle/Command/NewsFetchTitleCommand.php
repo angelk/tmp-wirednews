@@ -2,32 +2,29 @@
 
 namespace News\NewsBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewsFetchTitleCommand extends ContainerAwareCommand
+class NewsFetchTitleCommand extends NewFetchAbstractCommand
 {
     protected function configure()
     {
         $this
-            ->setName('newsFetchTitle')
-            ->setDescription('...')
-            ->addArgument('argument', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option', null, InputOption::VALUE_NONE, 'Option description')
+            ->setName('news:fetchTitle')
+            ->setDescription('Fetch top article data')
         ;
     }
-
+    
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $argument = $input->getArgument('argument');
-
-        if ($input->getOption('option')) {
-            // ...
-        }
-
-        $output->writeln('Command result.');
+        $crawler = $this->getCrawler('http://www.wired.com/');
+        $titleCrawler = $crawler->filter('#p1 h2');
+        $title = $titleCrawler->html();
+        
+        $linkCrawler = $crawler->filter('#p1 a');
+        $link = $linkCrawler->attr('href');
+        
+        $titleFetchEvent = new \News\NewsBundle\Fetch\Event\TitleFetchEvent($link, $title);
+        $this->dispachEvent('news.fetch.title', $titleFetchEvent);
     }
 }

@@ -1,4 +1,26 @@
 services:
-#    news.example:
-#        class: News\NewsBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    news.command.fetchTitle:
+        class: News\NewsBundle\Command\NewsFetchTitleCommand
+        calls:
+            - [setEventDispacher, ["@event_dispatcher"]]
+        tags:
+            -  { name: console.command }
+    
+    news.command.fetchLatest:
+        class: News\NewsBundle\Command\NewsFetchLatestCommand
+        calls:
+            - [setEventDispacher, ["@event_dispatcher"]]
+        tags:
+            -  { name: console.command }
+
+    news.fetch.title.subscriber:
+        class: News\NewsBundle\EventListener\TitleFetchSubscriber
+        name: news.fetch.title.event_subscriber
+        tags:
+            - {  name: kernel.event_subscriber }
+
+    news.fetch.latest.subscriber:
+        class: News\NewsBundle\EventListener\NewestFetchSubscriber
+        name: news.fetch.newest.event_subscriber
+        tags:
+            - {  name: kernel.event_subscriber }
