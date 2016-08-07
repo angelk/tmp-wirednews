@@ -8,4 +8,5 @@
 /app/config/parameters.yml
 /app/bootstrap.php.cache
 /var/*
+!/var/.gitkeep
 /web/bundles
