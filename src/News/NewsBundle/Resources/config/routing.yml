@@ -1,3 +1,4 @@
 news_homepage:
     path:     /
     defaults: { _controller: NewsBundle:Default:index }
+    methods: [GET]

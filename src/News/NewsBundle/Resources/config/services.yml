@@ -15,12 +15,10 @@ services:
 
     news.fetch.title.subscriber:
         class: News\NewsBundle\EventListener\TitleFetchSubscriber
-        name: news.fetch.title.event_subscriber
         tags:
             - {  name: kernel.event_subscriber }
 
     news.fetch.latest.subscriber:
         class: News\NewsBundle\EventListener\NewestFetchSubscriber
-        name: news.fetch.newest.event_subscriber
         tags:
             - {  name: kernel.event_subscriber }

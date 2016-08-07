@@ -2,6 +2,7 @@
     "name": "potaka/off-news",
     "license": "proprietary",
     "type": "project",
+    "description": "demo application",
     "autoload": {
         "psr-4": {
             "": "src/"
