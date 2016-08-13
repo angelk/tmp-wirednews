@@ -15,7 +15,15 @@ use News\NewsBundle\Fetch\Event\TitleFetchEvent;
  */
 class TitleFetchSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var Swift_Mailer
+     */
     private $mailer;
+    
+    /**
+     * To mail
+     * @var string
+     */
     private $reportingMail;
 
     /**

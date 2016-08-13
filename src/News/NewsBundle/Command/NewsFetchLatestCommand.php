@@ -11,6 +11,13 @@ use News\NewsBundle\Fetch\Event\NewestFetchEvent;
 
 class NewsFetchLatestCommand extends NewFetchAbstractCommand
 {
+    /**
+     * cache of news description
+     * link => description
+     * @var array
+     */
+    private $newsCache = [];
+    
     protected function configure()
     {
         $this
@@ -33,16 +40,45 @@ class NewsFetchLatestCommand extends NewFetchAbstractCommand
             $popularArticleCrawler = new \Symfony\Component\DomCrawler\Crawler($popularArticle);
             $linkCrawler = $popularArticleCrawler->filter('a');
             $link = $linkCrawler->attr('href');
-            $descriptionCrawler = $popularArticleCrawler->filter('h5');
-            $description = $descriptionCrawler->html();
-
+            $titleCrawler = $popularArticleCrawler->filter('h5');
+            $title = $titleCrawler->html();
+            $description = $this->getNewsDescription($link);
+            
             $links[] = [
                 'link' => $link,
+                'title' => $title,
                 'description' => $description,
             ];
         }
         
         $event = new NewestFetchEvent($links);
         $this->dispachEvent('news.fetch.latest', $event);
+    }
+    
+    /**
+     * There is no description on main page.
+     * Description is fetched form /most-popular page
+     * @param string $link
+     * @return string
+     */
+    protected function getNewsDescription($link)
+    {
+        if (empty($this->newsCache)) {
+            $crawler = $this->getCrawler('http://www.wired.com/most-popular');
+            $popularCrawler = $crawler->filter('#most-pop-list li');
+            foreach ($popularCrawler as $popularArticle) {
+                /* @var $popularArticleCrawler \DOMElement */
+                $popularArticleCrawler = new \Symfony\Component\DomCrawler\Crawler($popularArticle);
+                $linkCrawler = $popularArticleCrawler->filter('a');
+                $newsLink = $linkCrawler->attr('href');
+
+                $descriptionCrawler = $popularArticleCrawler->filter('p');
+                $description = $descriptionCrawler->text();
+
+                $this->newsCache[$newsLink] = $description;
+            }
+        }
+        
+        return $this->newsCache[$link];
     }
 }

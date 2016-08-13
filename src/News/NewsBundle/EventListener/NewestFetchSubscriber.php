@@ -15,7 +15,15 @@ use News\NewsBundle\Fetch\Event\NewestFetchEvent;
  */
 class NewestFetchSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var Swift_Mailer
+     */
     private $mailer;
+    
+    /**
+     * To: mail
+     * @var string
+     */
     private $reportingMail;
     
     /**
@@ -35,11 +43,19 @@ class NewestFetchSubscriber implements EventSubscriberInterface
         ];
     }
     
+    /**
+     * Triggered on 'news.fetch.latest' event
+     * @param NewestFetchEvent $event
+     */
     public function latestFetch(NewestFetchEvent $event)
     {
         $this->sendMail($event->getPopularArticles());
     }
     
+    /**
+     * Send mail with given news.
+     * @param array $news
+     */
     private function sendMail($news)
     {
         $message = Swift_Message::newInstance();
@@ -48,7 +64,10 @@ class NewestFetchSubscriber implements EventSubscriberInterface
         $message->setTo($this->reportingMail);
         $body = '';
         foreach ($news as $new) {
-            $body .= "{$new['link']} - {$new['description']}" . PHP_EOL;
+            $body .= "Link: {$new['link']}" . PHP_EOL .
+                "Title:{$new['title']}" . PHP_EOL .
+                "Descr:{$new['description']}" . PHP_EOL .
+                "----" . PHP_EOL;
         }
         $message->setBody($body);
         $this->mailer->send($message);
