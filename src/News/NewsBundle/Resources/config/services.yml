@@ -33,3 +33,4 @@ services:
             
     news.cache:
         class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+        arguments: ["", "", "%kernel.cache_dir%/user_cache"]
