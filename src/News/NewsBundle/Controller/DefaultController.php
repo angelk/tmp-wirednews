@@ -9,7 +9,10 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $titleStatus = $this->getStatus('news.fetch.lastTitle');
-        $latestStatus = $this->getStatus('news.fetch.latestNews');
+        $latestStatus = $this->getStatus(
+            'news.fetch.latestNews',
+            60*60*24*2
+        );
         
         return $this->render(
             'NewsBundle:Default:index.html.twig',
@@ -20,7 +23,12 @@ class DefaultController extends Controller
         );
     }
     
-    private function getStatus($cacheKey)
+    /**
+     * @param type $cacheKey
+     * @param type $outdate
+     * @return string
+     */
+    private function getStatus($cacheKey, $outdate = 60*60*24)
     {
         $cache = $this->get('news.cache');
         /* @var $cache \Symfony\Component\Cache\Adapter\AdapterInterface */
@@ -28,7 +36,7 @@ class DefaultController extends Controller
         
         if ($cacheItem->isHit()) {
             $lastSuccess = $cacheItem->get();
-            if ($lastSuccess > time() - 60*60*24) {
+            if ($lastSuccess > time() - $outdate) {
                 $return = "Working";
             } else {
                 $return = "Now working";
