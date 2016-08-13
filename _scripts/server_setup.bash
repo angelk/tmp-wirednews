@@ -4,12 +4,12 @@ apt-get update
 
 # update to php 5.6, cuz 5.5 is not supported
 apt-get install -y software-properties-common
-add-apt-repository ppa:ondrej/php5-5.6
+add-apt-repository ppa:ondrej/php
 apt-get update
 
 apt-key adv --keyserver keyserver.ubuntu.com --recv-key 4F4EA0AAE5267A6C
 
-apt-get install -y --force-yes apache2 wget unzip php5 vim cron
+apt-get install -y --force-yes apache2 wget unzip php5.6 vim cron
 
 wget https://getcomposer.org/composer.phar -O /usr/local/bin/composer
 chmod +x /usr/local/bin/composer
