@@ -30,6 +30,10 @@ class NewsFetchLatestCommand extends NewFetchAbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->shouldRun($output)) {
+            return false;
+        }
+        
         $crawler = $this->getCrawler('http://www.wired.com/');
         $popularCrawler = $crawler->filter('#most-pop-list li');
 
@@ -80,5 +84,24 @@ class NewsFetchLatestCommand extends NewFetchAbstractCommand
         }
         
         return $this->newsCache[$link];
+    }
+    
+    /**
+     * Determine if command conditions are met
+     * @return boolean
+     */
+    private function shouldRun(OutputInterface $output)
+    {
+        $now = new \DateTime('now');
+        $dateTime2k = new \DateTime('2000-01-01');
+        $diff = $now->diff($dateTime2k);
+        $diffDays = $diff->format('%a');
+        if ($diffDays % 2 != 0) {
+            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                $output->writeln("Command should run every 2 days");
+            }
+            return false;
+        }
+        return true;
     }
 }
