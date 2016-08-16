@@ -39,7 +39,7 @@ class DefaultController extends Controller
             if ($lastSuccess > time() - $outdate) {
                 $return = "Working";
             } else {
-                $return = "Now working";
+                $return = "Not working";
             }
         } else {
             $return = 'Unknown';
