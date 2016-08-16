@@ -9,7 +9,7 @@ apt-get update
 
 apt-key adv --keyserver keyserver.ubuntu.com --recv-key 4F4EA0AAE5267A6C
 
-apt-get install -y --force-yes apache2 wget unzip php5.6 php5.6-xml vim cron
+apt-get install -y --force-yes apache2 wget unzip php5.6 php5.6-xml vim cron ntp
 
 wget https://getcomposer.org/composer.phar -O /usr/local/bin/composer
 chmod +x /usr/local/bin/composer
