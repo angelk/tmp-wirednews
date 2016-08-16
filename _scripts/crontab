@@ -1,2 +1,2 @@
-30 6 * * *     php /var/www/latestnews/latest/bin/console -env=prod news:fetchLatest
-35 6 * * *     php /var/www/latestnews/latest/bin/console -env=prod news:fetchTitle
+30 6 * * *     php /var/www/latestnews/latest/bin/console --env=prod news:fetchLatest
+35 6 * * *     php /var/www/latestnews/latest/bin/console --env=prod news:fetchTitle
